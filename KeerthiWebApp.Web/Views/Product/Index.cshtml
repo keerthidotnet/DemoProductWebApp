@@ -1,0 +1,157 @@
+﻿@using System.Web.Mvc;
+@model IEnumerable<KeerthiWebApp.DTO.ProductDTO>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Products List</h2>
+<br />
+
+<table border="0" style="width: 100%;">
+    <tbody>
+        <tr style="width: 33.33%">
+            <td colspan="3">
+                <div id="jqGridProduct">
+                    <div>
+@{
+    var ProductGrid = new WebGrid(Model, canPage: true, canSort: true, rowsPerPage: 10, defaultSort: "ProductName", ajaxUpdateContainerId: "ProductGrid");
+    ProductGrid.Pager(WebGridPagerModes.NextPrevious);
+}
+
+                        @ProductGrid.GetHtml(tableStyle: "webgrid-table",
+            headerStyle: "webgrid-header",
+            footerStyle: "pagination",
+            alternatingRowStyle: "webgrid-alternating-row",
+            selectedRowStyle: "webgrid-selected-row",
+            rowStyle: "webgrid-row-style",
+            mode: WebGridPagerModes.All,
+            htmlAttributes: new { id = "ProductGrid" },
+
+             columns: ProductGrid.Columns(
+
+    ProductGrid.Column(null, null, format: @<text>
+                    <input type="hidden" id="ProductId" value='@item.ProductId' />
+                    <button id='btnProductEdit' class="glyphicon glyphicon-pencil edit btn btn-default btn-sm"></button></text>, style: "col0Width", canSort: false),
+
+    ProductGrid.Column("ProductName", "Product Name", format: @<text><span class="display-mode">
+                        <label id="lblProductName">@item.ProductName</label>
+                    </span></text>, style: "col2Width", canSort: true),
+
+   ProductGrid.Column("Category", "Category", format: @<text><span class="display-mode">
+                        <label id="lblCategory">@item.Category</label>
+                    </span></text>, style: "col2Width", canSort: true),
+
+    ProductGrid.Column("Price", "Price", format: @<text><span class="display-mode">
+                        <label id="lblPrice">@item.Price</label>
+                    </span></text>, style: "col2Width", canSort: true),
+
+    ProductGrid.Column("IsActive", "IsActive", format: @<text><span class="display-mode">
+                        <label id="lblIsActive">@item.IsActive</label>
+                    </span></text>, style: "col2Width", canSort: true),
+
+    ProductGrid.Column(null, null, format: @<text>
+                    <button id='btnProductDelete' class="glyphicon glyphicon-trash edit btn btn-default btn-sm"></button>
+    </text>, style: "col0Width", canSort: false)
+
+            ))
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<br/>
+
+<table border="0" style="width: 100%" class="Test-table">
+    <tbody>
+        <tr id="AddTable" class="GridCommandRow">
+            <td>
+                <button type="button" id="btnAddNewProduct" class="btn btn-default btn-sm">
+                    <span class="glyphicon glyphicon-plus"></span>Add New
+                </button>
+            </td>
+            <td style="text-align: right">
+                <div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px;
+                        top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001;
+                        opacity: 5; filter: alpha(opacity=60); display: none">
+                    <p style="position: absolute; top: 30%; left: 45%; color: White;">
+                        Please wait...<img src="~/Images/ajax-loader.gif" />
+                    </p>
+                </div>
+            </td>
+            </tr>
+        <tr>
+            <td>
+                <div>
+                    <table id="Add" class="webgrid-table" style="border:none; display: none;">
+                        <tbody>
+                            <tr>
+                                <td valign="top" align="left">
+                                    <table style="width: 100%" class="Test-table">
+                                        <tbody>
+                                            <tr>
+                                                <td width="14%">
+                                                    Product Name:
+                                                </td>
+                                                <td width="14%">
+                                                    @Html.TextBox("txtProductName","", new { @class = "form-control input-sm" })
+                                                </td>
+                                                <td width="30%">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="14%">
+                                                    Category:
+                                                </td>
+                                                <td width="60%">
+                                                    @Html.TextBox("txtCategory","", new { @class = "form-control input-sm" })
+                                                </td>
+                                                <td width="20%">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="14%">
+                                                    Price:
+                                                </td>
+                                                <td width="60%">
+                                                    @Html.TextBox("txtPrice","", new { @class = "form-control input-sm" })
+                                                </td>
+                                                <td width="20%">
+                                                </td>
+
+                                            </tr>
+                                            <tr>
+                                                <td width="14%">
+                                                    Is Active:
+                                                </td>
+                                                <td width="60%">
+                                                    @Html.CheckBox("chkIsActive",false , new { @class = "form-control input-sm" })
+                                                </td>
+                                                <td width="20%">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="14%"></td>
+                                                <td width="60%">
+                                                </td>
+                                                <td width="20%"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" align="left">
+                                    <input type="button" id="btnAddProductSave" value="Save" class="btn btn-success btn-xs" />
+                                    <input type="button" id="btnAddProductCancel" value="Cancel" class="btn btn-success btn-xs" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>
+
